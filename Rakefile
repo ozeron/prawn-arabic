@@ -1,38 +1,18 @@
-# 
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
- 
+$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'rubygems/package_task'
 require 'rake/testtask'
-require 'spec/rake/spectask'
+require 'rdoc/task'
+require 'rspec/core/rake_task'
 
-spec = Gem::Specification.new do |s|
-  s.name = 'Arabic-Prawn'
-  s.version = '0.0.1'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'Your summary here'
-  s.description = s.summary
-  s.author = 'Dynamix Solutions'
-  s.email = 'ahmed.nasser@dynamix-systems.com'
-  # s.executables = ['your_executable_here']
-  s.files = %w(LICENSE README Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
-  s.require_path = "lib"
-  s.bindir = "bin"
+task :build do
+  system "gem build arabic-prawn.gemspec"
 end
 
-Rake::GemPackageTask.new(spec) do |p|
-  p.gem_spec = spec
-  p.need_tar = true
-  p.need_zip = true
-end
-
-Rake::RDocTask.new do |rdoc|
+RDoc::Task.new do |rdoc|
   files =['README', 'LICENSE', 'lib/**/*.rb']
   rdoc.rdoc_files.add(files)
   rdoc.main = "README" # page to start on
@@ -45,6 +25,6 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/**/*.rb']
 end
 
-Spec::Rake::SpecTask.new do |t|
+RSpec::Core::RakeTask.new do |t|
   t.spec_files = FileList['spec/**/*.rb']
 end
