@@ -1,19 +1,20 @@
+# encoding: ascii-8bit
 class String
 
    require 'iconv'
    require 'open-uri'      # cf. http://www.ruby-doc.org/stdlib/libdoc/open-uri/rdoc/index.html
 
    # taken from: http://www.w3.org/International/questions/qa-forms-utf-8
-   UTF8REGEX = /\A(?:                               # ?: non-capturing group (grouping with no back references)
-                 [\x09\x0A\x0D\x20-\x7E]            # ASCII
-               | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-               |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-               | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-               |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-               |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-               | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-               |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-               )*\z/mnx
+  #  UTF8REGEX = /\A(?:                               # ?: non-capturing group (grouping with no back references)
+  #                [\x09\x0A\x0D\x20-\x7E]            # ASCII
+  #              | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+  #              |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+  #              | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+  #              |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+  #              |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+  #              | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+  #              |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+  #              )*\z/mxn
 
 
 #  create UTF-8 character arrays (as class instance variables)
@@ -28,17 +29,20 @@ class String
 
 
    # test data
-   @small_letters_utf8 = ["U+00F1", "U+00F4", "U+00E6", "U+00F8", "U+00E0", "U+00E1", "U+00E2", "U+00E4", "U+00E5", "U+00E7", "U+00E8", "U+00E9", "U+00EA", "U+00EB", "U+0153"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   # @small_letters_utf8 = ["U+00F1", "U+00F4", "U+00E6", "U+00F8", "U+00E0", "U+00E1", "U+00E2", "U+00E4", "U+00E5", "U+00E7", "U+00E8", "U+00E9", "U+00EA", "U+00EB", "U+0153"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   @small_letters_utf8 = ["U+00F1", "U+00F4", "U+00E6", "U+00F8", "U+00E0", "U+00E1", "U+00E2", "U+00E4", "U+00E5", "U+00E7", "U+00E8", "U+00E9", "U+00EA", "U+00EB", "U+0153"].map { |x| u = [x[2..-1].hex].pack("U*"); u.valid_encoding? ? u : nil}
 
 
-   @capital_letters_utf8 = ["U+00D1", "U+00D4", "U+00C6", "U+00D8", "U+00C0", "U+00C1", "U+00C2", "U+00C4", "U+00C5", "U+00C7", "U+00C8", "U+00C9", "U+00CA", "U+00CB", "U+0152"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   # @capital_letters_utf8 = ["U+00D1", "U+00D4", "U+00C6", "U+00D8", "U+00C0", "U+00C1", "U+00C2", "U+00C4", "U+00C5", "U+00C7", "U+00C8", "U+00C9", "U+00CA", "U+00CB", "U+0152"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   @capital_letters_utf8 = ["U+00D1", "U+00D4", "U+00C6", "U+00D8", "U+00C0", "U+00C1", "U+00C2", "U+00C4", "U+00C5", "U+00C7", "U+00C8", "U+00C9", "U+00CA", "U+00CB", "U+0152"].map { |x| u = [x[2..-1].hex].pack("U*"); u.valid_encoding? ? u : nil }
 
 
-   @other_letters_utf8 = ["U+03A3", "U+0639", "U+0041", "U+F8D0", "U+F8FF", "U+4E2D", "U+F4EE", "U+00FE", "U+10FFFF", "U+00A9", "U+20AC", "U+221E", "U+20AC", "U+FEFF", "U+FFFD", "U+00FF", "U+00FE", "U+FFFE", "U+FEFF"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   # @other_letters_utf8 = ["U+03A3", "U+0639", "U+0041", "U+F8D0", "U+F8FF", "U+4E2D", "U+F4EE", "U+00FE", "U+10FFFF", "U+00A9", "U+20AC", "U+221E", "U+20AC", "U+FEFF", "U+FFFD", "U+00FF", "U+00FE", "U+FFFE", "U+FEFF"].map { |x| u = [x[2..-1].hex].pack("U*"); u =~ UTF8REGEX ? u : nil }
+   @other_letters_utf8 = ["U+03A3", "U+0639", "U+0041", "U+F8D0", "U+F8FF", "U+4E2D", "U+F4EE", "U+00FE", "U+10FFFF", "U+00A9", "U+20AC", "U+221E", "U+20AC", "U+FEFF", "U+FFFD", "U+00FF", "U+00FE", "U+FFFE", "U+FEFF"].map { |x| u = [x[2..-1].hex].pack("U*"); u.valid_encoding? ? u : nil }
 
-   if @small_letters_utf8.size != @small_letters_utf8.nitems then raise "Invalid UTF-8 char in @small_letters_utf8!" end
-   if @capital_letters_utf8.size != @capital_letters_utf8.nitems then raise "Invalid UTF-8 char in @capital_letters_utf8!" end
-   if @other_letters_utf8.size != @other_letters_utf8.nitems then raise "Invalid UTF-8 char in @other_letters_utf8!" end
+   if @small_letters_utf8.size != @small_letters_utf8.count{|x| !x.nil?} then raise "Invalid UTF-8 char in @small_letters_utf8!" end
+   if @capital_letters_utf8.size != @capital_letters_utf8.count{|x| !x.nil?} then raise "Invalid UTF-8 char in @capital_letters_utf8!" end
+   if @other_letters_utf8.size != @other_letters_utf8.count{|x| !x.nil?} then raise "Invalid UTF-8 char in @other_letters_utf8!" end
 
 
    @unicode_array = []
@@ -286,7 +290,7 @@ class String
 
 
    # note that the i option does not work in special cases with back references
-   # example: "àÀ".slice_utf8(/(.).*?\1/i) returns nil whereas "aA".slice(/(.).*?\1/i) returns "aA"
+   # example: "ï¿½ï¿½".slice_utf8(/(.).*?\1/i) returns nil whereas "aA".slice(/(.).*?\1/i) returns "aA"
    def slice_utf8(regex)
       opts = regex.inspect.gsub(/\A(.).*\1([eimnosux]*)\z/mu, '\2')
       if  opts.count('u') == 0 then opts = opts + "u" end
@@ -398,12 +402,14 @@ class String
    end
 
    def utf8?
-     self =~ UTF8REGEX
+    #  self =~ UTF8REGEX
+    encoding == Encoding.find("UTF-8") && valid_encoding?
    end
 
-   def clean_utf8
+   def a
        t = ""
-       self.scan(/./um) { |c| t << c if c =~ UTF8REGEX }
+       # self.scan(/./um) { |c| t << c if c =~ UTF8REGEX }
+       chars.each { |c| t << c if c.utf8? }
        t
    end
 
@@ -722,5 +728,3 @@ class String
    end
 
 end
-
-
