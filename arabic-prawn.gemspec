@@ -6,7 +6,7 @@ require 'rubygems'
 
 Gem::Specification.new do |s|
   s.name = 'prawn-arabic'
-  s.version = '0.0.4'
+  s.version = '0.0.5'
   s.has_rdoc = true
   s.extra_rdoc_files = ['README.md', 'LICENSE']
   s.summary = 'Arabic language string helpers '
@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.require_path = "lib"
   s.bindir = "bin"
   s.add_runtime_dependency('iconv', '~> 1.0')
+  s.add_development_dependency('pry')
 end

@@ -12,6 +12,16 @@ task :build do
   system "gem build arabic-prawn.gemspec"
 end
 
+task :console do
+  begin
+    require 'pry'
+    gem_name = File.basename(Dir.pwd)
+    sh %{pry -I lib -r #{gem_name}.rb}
+  rescue LoadError => _
+    sh %{irb -rubygems -I lib -r #{gem_name}.rb}
+  end
+end
+
 RDoc::Task.new do |rdoc|
   files =['README', 'LICENSE', 'lib/**/*.rb']
   rdoc.rdoc_files.add(files)
